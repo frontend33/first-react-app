@@ -5,13 +5,18 @@ import TodoList from './components/todo-list'
 import SearchPanel from './components/search-panel'
 
 const App = () => {
+    const todoData = [
+        {label: 'Drink Coffee', important: false },
+        {label: 'Make Awesome App', important: true },
+        {label: 'Have a lunch', important: false },
+    ]
     const value = '<script>alert("React")</script>'
     return (
         <div>
             { value }
             <AppHeader></AppHeader>
             <SearchPanel></SearchPanel>
-            <TodoList></TodoList>
+            <TodoList todos={todoData} ></TodoList>
         </div>
     )
 }
