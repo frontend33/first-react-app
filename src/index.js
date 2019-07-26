@@ -17,18 +17,28 @@ const AppHeader = () => {
     return <h1>My Todo List</h1>
 }
 
+// В JSX отличие атрибутов только for и class на htmlFor и className
 const SearchPanel = () => {
     const searchText = 'Type here to search'
-    return  <input placeholder={searchText}/>
+    const searchStyle = {
+        fontSize: '20px'
+    }
+    return  <input
+        style={searchStyle}
+        placeholder={searchText}
+        autoComplete = ""
+        className="foo"
+        htmlFor=""
+        disabled
+    />
+//    В JSX правила более строгие название атрибутов нужно писать camelCase с маленькой буквы а в реакте компоненты с большой
 }
 
 const App = () => {
-    // const  isLoggedIn = true
-    // const loginBox = <span>Log in please</span>
-    // const welcomeBox = <span>Welcome Back</span>
+    const value = '<script>alert("React")</script>'
     return (
         <div>
-            {/*{ isLoggedIn ? welcomeBox : loginBox }*/}
+            { value }
             <AppHeader></AppHeader>
             <SearchPanel></SearchPanel>
             <TodoList></TodoList>
@@ -36,11 +46,15 @@ const App = () => {
     )
 }
 
-// блок jsx кода можно было бы создать как ниже (babel увидит jsx и компилирует код в js)
-// const el = React.createElement('h1', null, 'Hello World!!');
-// Если блок кода состоит из нескольких строк его следует поместить в круглые скобки
-// const el =  <App></App>
-// const el = <h1> Hello world </h1>
+/* jsx Позволяет использовать выражения {foo.bar}
+Аттрибуты называются camelCase
+class = className, for = htmlFor
+В свойства можно передавать любое значение
+null, undefined, true и false в теле тегов игнорируются не вызывая ошибок
+
+
+*/
+
 
 
 //Техника использует легковесные объекты которые описывают элементы на странице (виртуальный дом)
