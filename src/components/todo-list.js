@@ -2,7 +2,10 @@
 // Преимущества JSX что он понимает js код
 import React from "react";
 import TodoListItem from "./todo-list-item";
+import './todo-list.css';
+
 const TodoList = ({ todos }) => {
+
 /*
     Массив можно передать как свойство
     В JSX можно вставлять массивы элементов (не только по одному)
@@ -20,7 +23,7 @@ const TodoList = ({ todos }) => {
         // В свойстве  itemProps будут все свойства кроме id
         const { id, ...itemProps } = item
        return (
-           <li key={ id }>
+           <li key={ id } className="list-group-item">
                <TodoListItem
                    /* Не будем передавать id в spread оператор */
                    // label={item.label}
@@ -33,7 +36,7 @@ const TodoList = ({ todos }) => {
     })
 
     return (
-        <ul>
+        <ul className="list-group todo-list">
             { elements }
         </ul>
     )
