@@ -16,15 +16,32 @@ export default class TodoListItem extends Component {
     // }
     // В реакте после инициализации state изменять нельзя
     state = {
-        done: false
+        done: false,
+        important: false
     }
     // В новом стандарте можно не в контсруктуре а использовать функцию в теле класса - привязаны к объекту
     onLabelClick = () => {
-        // изменяем состояние не напрямую setState говорит состояние компонента изменилось нужно перерендерить
-        this.setState({
-            done: true
+        // Что бы обновить state  setState
+        // this.setState({
+        //     done: true
+        // })
+        /* Если ваше новое состояние независит ни как от предыдущего состояния можно использовать
+         setState и передавать внутрь объект this.setState({done: true}) если состояние зависит от предыдущего
+        переключать значения, счетчик обязательно передаем внутрь функции другую функцию (для асинхронщины)
+        */
+       this.setState(({done}) => {
+            return {
+                done: !done
+            }
         })
-        // console.log(`Done: ${this.props.label}`)
+    }
+    onMarkImportant = () => {
+        // setState применяет только ту часть state которая должна измениться не весь state а только то что нужно изменить
+        this.setState(({important}) => {
+            return {
+                important: !important
+            }
+        })
     }
     // constructor () {
     //     /*
@@ -42,29 +59,32 @@ export default class TodoListItem extends Component {
     // В классе функция которая будет отображать наш компонент называется render
     render() {
         // В классе свойства хранятся как поле класса в this.props
-        const { label, important = false } = this.props
-        const { done } = this.state
+        const { label } = this.props
+        const { done, important } = this.state
         let classNames = 'todo-list-item'
         if (done) {
             // меняем только один элемент, реакт находит, что у элемента изменился класс и меняет только его
             classNames += ' done'
         }
-        const style = {
-            color: important ? 'steelblue' : 'black',
-            fontWeight: important ? 'bold' : 'normal'
+        // const style = {
+        //     color: important ? 'steelblue' : 'black',
+        //     fontWeight: important ? 'bold' : 'normal'
+        // }
+        if (important) {
+            classNames += ' important'
         }
         return (
             <span className={classNames}>
                 <span
                     className="todo-list-item-label"
-                    style={style}
                     // onClick = { () => console.log(`Done: ${label}`) }>
                     onClick={this.onLabelClick}>
                     {label}
                 </span>
 
                 <button type="button"
-                    className="btn btn-outline-success btn-sm float-right">
+                    className="btn btn-outline-success btn-sm float-right"
+                    onClick={ this.onMarkImportant }>
                     <i className="fa fa-exclamation" />
                 </button>
 
