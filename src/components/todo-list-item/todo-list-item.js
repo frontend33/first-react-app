@@ -29,7 +29,8 @@ export default class TodoListItem extends Component {
          setState и передавать внутрь объект this.setState({done: true}) если состояние зависит от предыдущего
         переключать значения, счетчик обязательно передаем внутрь функции другую функцию (для асинхронщины)
         */
-       this.setState(({done}) => {
+        // this.setState((state)=>{}) принимает функцию можно деструктурировать аргумент 
+        this.setState(({ done }) => {
             return {
                 done: !done
             }
@@ -37,7 +38,7 @@ export default class TodoListItem extends Component {
     }
     onMarkImportant = () => {
         // setState применяет только ту часть state которая должна измениться не весь state а только то что нужно изменить
-        this.setState(({important}) => {
+        this.setState(({ important }) => {
             return {
                 important: !important
             }
@@ -59,17 +60,13 @@ export default class TodoListItem extends Component {
     // В классе функция которая будет отображать наш компонент называется render
     render() {
         // В классе свойства хранятся как поле класса в this.props
-        const { label } = this.props
+        const { label, onDeleted} = this.props
         const { done, important } = this.state
         let classNames = 'todo-list-item'
         if (done) {
             // меняем только один элемент, реакт находит, что у элемента изменился класс и меняет только его
             classNames += ' done'
         }
-        // const style = {
-        //     color: important ? 'steelblue' : 'black',
-        //     fontWeight: important ? 'bold' : 'normal'
-        // }
         if (important) {
             classNames += ' important'
         }
@@ -84,12 +81,14 @@ export default class TodoListItem extends Component {
 
                 <button type="button"
                     className="btn btn-outline-success btn-sm float-right"
-                    onClick={ this.onMarkImportant }>
+                    onClick={this.onMarkImportant}>
                     <i className="fa fa-exclamation" />
                 </button>
 
                 <button type="button"
-                    className="btn btn-outline-danger btn-sm float-right">
+                    className="btn btn-outline-danger btn-sm float-right"
+                    onClick = {onDeleted}
+                    >
                     <i className="fa fa-trash-o" />
                 </button>
             </span>
@@ -97,28 +96,3 @@ export default class TodoListItem extends Component {
     };
 }
 
-// const TodoListItemFunc = ({ label, important = false }) => {
-//     const style = {
-//         color: important ? 'steelblue' : 'black',
-//         fontWeight: important ? 'bold' : 'normal'
-//     }
-//     return (
-//         <span className="todo-list-item">
-//             <span
-//                 className="todo-list-item-label"
-//                 style={style}>
-//                 {label}
-//             </span>
-
-//             <button type="button"
-//                 className="btn btn-outline-success btn-sm float-right">
-//                 <i className="fa fa-exclamation" />
-//             </button>
-
-//             <button type="button"
-//                 className="btn btn-outline-danger btn-sm float-right">
-//                 <i className="fa fa-trash-o" />
-//             </button>
-//         </span>
-//     );
-// };

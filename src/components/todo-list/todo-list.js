@@ -4,7 +4,7 @@ import React from "react";
 import TodoListItem from "../todo-list-item";
 import './todo-list.css';
 
-const TodoList = ({ todos }) => {
+const TodoList = ({ todos, onDeleted }) => {
 
 /*
     Массив можно передать как свойство
@@ -26,10 +26,8 @@ const TodoList = ({ todos }) => {
            <li key={ id } className="list-group-item">
                <TodoListItem
                    /* Не будем передавать id в spread оператор */
-                   // label={item.label}
-                   // important={item.important}
-                   /*Используем spread оператор*/
                    { ...itemProps }
+                   onDeleted={() => onDeleted(id) }
                />
            </li>
        )
