@@ -7,9 +7,24 @@ import './todo-list-item.css'
 // Наш класс наследует React.Component
 // класс TodoListItem будет стоять в цепочке прототипов Component -> Component.prototype -> Object.prototype-> null
 export default class TodoListItem extends Component {
+    // В реакте внутреннее состояние можно хранить в специальном поле state
+    // constructor () {
+    //     super()
+    //     this.state = {
+    //         done: false
+    //     }
+    // }
+    // В реакте после инициализации state изменять нельзя
+    state = {
+        done: false
+    }
     // В новом стандарте можно не в контсруктуре а использовать функцию в теле класса - привязаны к объекту
     onLabelClick = () => {
-        console.log(`Done: ${this.props.label}`)
+        // изменяем состояние не напрямую setState говорит состояние компонента изменилось нужно перерендерить
+        this.setState({
+            done: true
+        })
+        // console.log(`Done: ${this.props.label}`)
     }
     // constructor () {
     //     /*
@@ -28,17 +43,23 @@ export default class TodoListItem extends Component {
     render() {
         // В классе свойства хранятся как поле класса в this.props
         const { label, important = false } = this.props
+        const { done } = this.state
+        let classNames = 'todo-list-item'
+        if (done) {
+            // меняем только один элемент, реакт находит, что у элемента изменился класс и меняет только его
+            classNames += ' done'
+        }
         const style = {
             color: important ? 'steelblue' : 'black',
             fontWeight: important ? 'bold' : 'normal'
         }
         return (
-            <span className="todo-list-item">
+            <span className={classNames}>
                 <span
                     className="todo-list-item-label"
                     style={style}
                     // onClick = { () => console.log(`Done: ${label}`) }>
-                    onClick={ this.onLabelClick }>
+                    onClick={this.onLabelClick}>
                     {label}
                 </span>
 
