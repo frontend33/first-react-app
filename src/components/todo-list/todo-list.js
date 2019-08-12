@@ -1,7 +1,7 @@
 // Корнем JSX элемента должен быть один элемент, для того чтобы использовать несколько тегов оборачиваем в div
 // Преимущества JSX что он понимает js код
 import React from "react";
-import TodoListItem from "./todo-list-item";
+import TodoListItem from "../todo-list-item";
 import './todo-list.css';
 
 const TodoList = ({ todos }) => {
