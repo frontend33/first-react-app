@@ -16,7 +16,8 @@ export default class App extends Component {
       this.createToDoItem('Make Awesome App'),
       this.createToDoItem('Have a lunch')
     ],
-    textSearch: ''
+    textSearch: '',
+    filter: 'all' // active, all, done
   }
   createToDoItem(label) {
     return {
@@ -93,6 +94,10 @@ export default class App extends Component {
     this.setState({ textSearch })
   }
 
+  onFilterChange = (filter) => {
+    this.setState ({ filter })
+  }
+
   searchPanel(array, text) {
     if (array.length === 0) {
       return array
@@ -102,11 +107,24 @@ export default class App extends Component {
     })
   }
 
+  filters (array, filter) {
+    switch(filter) {
+      case 'all' :
+        return array
+      case 'active':
+        return array.filter((item) => !item.done)
+      case 'done':
+        return array.filter((item) => item.done)
+      default:
+        return array
+    }
+  }
+
   render() {
     // Достаем данные из хранилища
-    const { todoData, textSearch } = this.state
+    const { todoData, textSearch, filter } = this.state
     // Сравниваем данные из хранилища с массивом в функции searchPanel и на отрисовку уже передаем visibleItems
-    const visibleItems = this.searchPanel(todoData, textSearch)
+    const visibleItems = this.filters(this.searchPanel(todoData, textSearch), filter)
 
     const doneCount = todoData.filter((el) => el.done).length
     const todoCount = todoData.length - doneCount
@@ -115,7 +133,9 @@ export default class App extends Component {
         <AppHeader toDo={todoCount} done={doneCount} />
         <div className="top-panel d-flex">
           <SearchPanel onSearchChange={this.onSearchChange} />
-          <ItemStatusFilter />
+          <ItemStatusFilter
+            filter={filter}
+            onFilterChange = { this.onFilterChange } />
 
         </div>
 
