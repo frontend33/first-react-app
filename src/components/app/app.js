@@ -6,6 +6,7 @@ import SearchPanel from '../search-panel/search-panel'
 import ItemStatusFilter from '../item-status-filter';
 import ItemAddForm from '../item-add-form'
 import './app.css'
+import { isTerminatorless } from '@babel/types';
 
 export default class App extends Component {
   maxId = 100
@@ -14,7 +15,8 @@ export default class App extends Component {
       this.createToDoItem('Drink Coffee'),
       this.createToDoItem('Make Awesome App'),
       this.createToDoItem('Have a lunch')
-    ]
+    ],
+    textSearch: ''
   }
   createToDoItem(label) {
     return {
@@ -73,38 +75,51 @@ export default class App extends Component {
 
   onToggleDone = (id) => {
     this.setState(({ todoData }) => {
-
       return {
         todoData: this.toggleProperty(todoData, id, 'done')
       }
     })
-
   }
   onToggleImportant = (id) => {
     console.log('toggle important', id)
     this.setState(({ todoData }) => {
-
       return {
         todoData: this.toggleProperty(todoData, id, 'important')
       }
     })
   }
 
+  onSearchChange = (textSearch) => {
+    this.setState({ textSearch })
+  }
+
+  searchPanel(array, text) {
+    if (array.length === 0) {
+      return array
+    }
+    return array.filter((item) => {
+      return item.label.toLowerCase().indexOf(text.toLowerCase()) > -1
+    })
+  }
 
   render() {
-    const { todoData } = this.state
+    // Достаем данные из хранилища
+    const { todoData, textSearch } = this.state
+    // Сравниваем данные из хранилища с массивом в функции searchPanel и на отрисовку уже передаем visibleItems
+    const visibleItems = this.searchPanel(todoData, textSearch)
+
     const doneCount = todoData.filter((el) => el.done).length
     const todoCount = todoData.length - doneCount
     return (
       <div className="todo-app">
         <AppHeader toDo={todoCount} done={doneCount} />
         <div className="top-panel d-flex">
-          <SearchPanel />
+          <SearchPanel onSearchChange={this.onSearchChange} />
           <ItemStatusFilter />
 
         </div>
 
-        <TodoList todos={todoData}
+        <TodoList todos={visibleItems}
           /* Любой компонент может генерировать собственные события (onDone, onAdded)
           Достаточно передать callback функцию как property, а затем вызвать ее из компонента когда наступило событие
           Через события данные поднимаются вверх по иерархии компонентов
