@@ -4,13 +4,13 @@ import React from "react";
 import TodoListItem from "../todo-list-item";
 import './todo-list.css';
 
-const TodoList = ({ todos, onDeleted }) => {
+const TodoList = ({ todos, onDeleted, onToggleImportant, onToggleDone }) => {
 
-/*
-    Массив можно передать как свойство
-    В JSX можно вставлять массивы элементов (не только по одному)
-    Можно передать все свойства объекта в компонент используя Object spread оператор не перечисляя каждое
-*/
+    /*
+        Массив можно передать как свойство
+        В JSX можно вставлять массивы элементов (не только по одному)
+        Можно передать все свойства объекта в компонент используя Object spread оператор не перечисляя каждое
+    */
 
     // Вместо того что бы сравнивать элементы один за другим React смотрит на уникальные ключи сопоставляя элементы между
     //собой тем самым если ключа нет реакт добавит <li> точечно не обновляя весь ul если ключ есть то реакт не будет обновлять элемент
@@ -22,20 +22,22 @@ const TodoList = ({ todos, onDeleted }) => {
     const elements = todos.map((item) => {
         // В свойстве  itemProps будут все свойства кроме id
         const { id, ...itemProps } = item
-       return (
-           <li key={ id } className="list-group-item">
-               <TodoListItem
-                   /* Не будем передавать id в spread оператор */
-                   { ...itemProps }
-                   onDeleted={() => onDeleted(id) }
-               />
+        return (
+            <li key={id} className="list-group-item">
+                <TodoListItem
+                    /* Не будем передавать id в spread оператор */
+                    {...itemProps}
+                    onDeleted={() => onDeleted(id)}
+                    onToggleImportant={() => onToggleImportant(id)}
+                    onToggleDone={() => onToggleDone(id)}
+                />
            </li>
-       )
+        )
     })
 
     return (
         <ul className="list-group todo-list">
-            { elements }
+            {elements}
         </ul>
     )
 }

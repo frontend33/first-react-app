@@ -1,49 +1,19 @@
 import React, { Component } from 'react'
 import './todo-list-item.css'
-// const TodoListItem = (props) => {
-//     return <span> { props.label } </span>
-// }
+
+/*
+Централизовать управление данными хорошая практика
+Если данные нужно использовать в нескольких компонентах - их нужно хранить в родительском компоненте
+Что бы поднять данные вверх по иррархии компонентов используйте события
+*/
 
 // Наш класс наследует React.Component
 // класс TodoListItem будет стоять в цепочке прототипов Component -> Component.prototype -> Object.prototype-> null
 export default class TodoListItem extends Component {
-    // В реакте внутреннее состояние можно хранить в специальном поле state
-    // constructor () {
-    //     super()
-    //     this.state = {
-    //         done: false
-    //     }
-    // }
-    // В реакте после инициализации state изменять нельзя
-    state = {
-        done: false,
-        important: false
-    }
+
+
     // В новом стандарте можно не в контсруктуре а использовать функцию в теле класса - привязаны к объекту
-    onLabelClick = () => {
-        // Что бы обновить state  setState
-        // this.setState({
-        //     done: true
-        // })
-        /* Если ваше новое состояние независит ни как от предыдущего состояния можно использовать
-         setState и передавать внутрь объект this.setState({done: true}) если состояние зависит от предыдущего
-        переключать значения, счетчик обязательно передаем внутрь функции другую функцию (для асинхронщины)
-        */
-        // this.setState((state)=>{}) принимает функцию можно деструктурировать аргумент 
-        this.setState(({ done }) => {
-            return {
-                done: !done
-            }
-        })
-    }
-    onMarkImportant = () => {
-        // setState применяет только ту часть state которая должна измениться не весь state а только то что нужно изменить
-        this.setState(({ important }) => {
-            return {
-                important: !important
-            }
-        })
-    }
+
     // constructor () {
     //     /*
     //     Если класс наследует какой то другой класс мы обязательно вызываем конструктор класса явно
@@ -51,17 +21,12 @@ export default class TodoListItem extends Component {
     //     дает доступ не только к супер конструктору, но и к любому методу объявленному в super классе
     //     */
     //     super()
-    //     // super.reactComponent любой метод из Component, если нужно переопределить функцию просто ниже создаем 
-    //     // метод reactComponent и можем переопределить
-    //     this.onLabelClick = () => {
-    //         console.log(`Done: ${this.props.label}`)
-    //     }
-    // }
+
     // В классе функция которая будет отображать наш компонент называется render
-    render() {
+    render () {
         // В классе свойства хранятся как поле класса в this.props
-        const { label, onDeleted} = this.props
-        const { done, important } = this.state
+        const { label, onDeleted, onToggleImportant, onToggleDone, important, done } = this.props
+        // const { ,  } = this.state
         let classNames = 'todo-list-item'
         if (done) {
             // меняем только один элемент, реакт находит, что у элемента изменился класс и меняет только его
@@ -74,21 +39,20 @@ export default class TodoListItem extends Component {
             <span className={classNames}>
                 <span
                     className="todo-list-item-label"
-                    // onClick = { () => console.log(`Done: ${label}`) }>
-                    onClick={this.onLabelClick}>
+                    onClick={onToggleDone}>
                     {label}
                 </span>
 
                 <button type="button"
                     className="btn btn-outline-success btn-sm float-right"
-                    onClick={this.onMarkImportant}>
+                    onClick={onToggleImportant}>
                     <i className="fa fa-exclamation" />
                 </button>
 
                 <button type="button"
                     className="btn btn-outline-danger btn-sm float-right"
-                    onClick = {onDeleted}
-                    >
+                    onClick={onDeleted}
+                >
                     <i className="fa fa-trash-o" />
                 </button>
             </span>
